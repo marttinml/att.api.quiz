@@ -1,0 +1,15 @@
+{
+    "name": "api.toBusiness",
+    "version": "0.0.1",
+    "dependencies": {
+      "express": "~4.8.8",
+      "mongodb":"~2.0.14",  
+		  "body-parser": "~1.8.0",
+		  "method-override": "~2.2.0",
+      "merge":"~1.2.0",
+      "mongodb-autoincrement":"~1.0.1"
+  },
+  "engines": {
+    "node": "4.1.1"
+  }
+}
