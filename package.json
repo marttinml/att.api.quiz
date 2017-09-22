@@ -10,6 +10,6 @@
       "mongodb-autoincrement":"~1.0.1"
   },
   "engines": {
-    "node": "4.1.1"
-  }
+    "node": "4.8.4"
+  },
 }
