@@ -123,22 +123,21 @@ module.exports.retrieve = function (db, callback) {
 };
 
 module.exports.detail = function (db, id, callback) {
-  var result = [{}];
-  var cursor = db.collection('encuestas').find({ id: Number(id) });
-  var code = 201;
-  var i = 0;
-  cursor.each(function (err, doc) {
-    if (doc != null) {
-      // doc.id = doc._id;
-      delete doc._id;
-      doc.valides = new Date(doc.valides);
-      doc.date = new Date(doc.date);
-      result[i] = doc;
-      i++;
-      code = 200;
-    } else {
-      callback(result[0], code);
-    }
+  var result = {};
+  db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 1 }).count().then((n) => {
+    var code = 201;
+    db.collection('encuestas').find({ id: Number(id) }).each(function (err, doc) {
+      if (doc != null) {
+        result = doc;
+        delete result._id;
+        result.valides = new Date(result.valides);
+        result.date = new Date(result.date);
+        result.respondida = n;
+        code = 200;
+      } else {
+        callback(result, code);
+      }
+    });
   });
 };
 
