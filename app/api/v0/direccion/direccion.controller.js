@@ -7,10 +7,10 @@ var DireccionModel 	= require('./direccion.model'),
     controller  = 'test';
 
 (function(){
-  // Connection.ejecute(function(err, db){
+  // Connection.ejecute(function(err, client){
   //     assert.equal(null, err);
-  //      DireccionCollection.initDireccion(db);
-  //      db.close();
+  //      DireccionCollection.initDireccion(client.db());
+  //      client.close();
   //   });
 })();
 
@@ -18,12 +18,12 @@ module.exports.create = function (req, res) {
     var d   = new Date();
     start   = d.getMilliseconds();
     Log.logStart({controller : controller, method:'Direccion.create', d : d, body:req.body });
-	Connection.ejecute(function(err, db){
+	Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-        DireccionModel.create(db, req.body, function(err, result, status) {
+        DireccionModel.create(client.db(), req.body, function(err, result, status) {
             assert.equal(err, null);
-            db.close();
+            client.close();
             Log.logEnd({ start : start , response: result});
             //response
             res.status(status).jsonp(result);
@@ -35,11 +35,11 @@ module.exports.retrieve = function (req, res) {
     var d   = new Date();
     start   = d.getMilliseconds();
     Log.logStart({controller : controller, method:'Direccion.retrieve', d : d });
-    Connection.ejecute(function(err, db){
+    Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-      DireccionModel.retrieve(db, function(result) {
-          db.close();
+      DireccionModel.retrieve(client.db(), function(result) {
+          client.close();
           Log.logEnd({ start : start , response: result});
           res.status(200).jsonp(result);
       });
@@ -50,11 +50,11 @@ module.exports.detail = function (req, res) {
     var d   = new Date();
         start   = d.getMilliseconds();
         Log.logStart({controller : controller, method:'Direccion.detail', d : d});
-    Connection.ejecute(function(err, db){
+    Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-      DireccionModel.detail(db, req.params.id, function(result) {
-          db.close();
+      DireccionModel.detail(client.db(), req.params.id, function(result) {
+          client.close();
           Log.logEnd({ start : start , response: result});
           res.status(200).jsonp(result);
       });
@@ -65,12 +65,12 @@ module.exports.update = function (req, res) {
     var d   = new Date();
     start   = d.getMilliseconds();
     Log.logStart({controller : controller, method:'Direccion.update', d : d, body:req.body });
-  Connection.ejecute(function(err, db){
+  Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-          DireccionModel.update(db, req.params.id, req.body, function(err, result, status) {
+          DireccionModel.update(client.db(), req.params.id, req.body, function(err, result, status) {
               assert.equal(err, null);
-              db.close();
+              client.close();
               Log.logEnd({ start : start , response: result});
               //response
               res.status(status).jsonp(result);
@@ -82,12 +82,12 @@ module.exports.replace = function (req, res) {
     var d   = new Date();
     start   = d.getMilliseconds();
     Log.logStart({controller : controller, method:'Direccion.replace', d : d, body:req.body });
-  Connection.ejecute(function(err, db){
+  Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-          DireccionModel.replace(db, req.params.id, req.body, function(err, result, status) {
+          DireccionModel.replace(client.db(), req.params.id, req.body, function(err, result, status) {
               assert.equal(err, null);
-              db.close();
+              client.close();
               Log.logEnd({ start : start , response: result});
               //response
               res.status(status).jsonp(result);
@@ -99,12 +99,12 @@ module.exports.delete = function (req, res) {
     var d   = new Date();
     start   = d.getMilliseconds();
     Log.logStart({controller : controller, method:'Direccion.delete', d : d });
-  Connection.ejecute(function(err, db){
+  Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
-          DireccionModel.delete(db, req.params.id, function(err, result, status) {
+          DireccionModel.delete(client.db(), req.params.id, function(err, result, status) {
               assert.equal(err, null);
-              db.close();
+              client.close();
               Log.logEnd({ start : start , response: result});
               //response
               res.status(status).jsonp(result);

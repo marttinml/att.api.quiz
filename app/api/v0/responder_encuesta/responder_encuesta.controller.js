@@ -10,7 +10,7 @@ var ResponderEncuestaModel 	= require('./responder_encuesta.model'),
 (function(){
   // Connection.ejecute(function(err, db){
   //     assert.equal(null, err);
-  //      ResponderEncuestaCollection.initResponderEncuesta(db);
+  //      ResponderEncuestaCollection.initResponderEncuesta(client.db());
   //      db.close();
   //   });
 })();
@@ -24,7 +24,7 @@ module.exports.create = function (req, res) {
         assert.equal(null, err);
         //ejecute query
 
-        EncuestaModel.detail(db, req.body.idEncuesta,function(encuesta, status){
+        EncuestaModel.detail(client.db(), req.body.idEncuesta,function(encuesta, status){
 
           if(status === 200){
             
@@ -34,7 +34,7 @@ module.exports.create = function (req, res) {
                 preguntasList   : req.body.preguntas,
                 tipoEncuesta: encuesta.tipoEncuesta
               };
-              ResponderEncuestaModel.create(db, data, function(err, result, status) {
+              ResponderEncuestaModel.create(client.db(), data, function(err, result, status) {
                 assert.equal(err, null);
                 db.close();
                 Log.logEnd({ start : start , response: result});
@@ -58,7 +58,7 @@ module.exports.retrieve = function (req, res) {
     Connection.ejecute(function(err, db){
         assert.equal(null, err);
         //ejecute query
-      ResponderEncuestaModel.retrieve(db, function(result) {
+      ResponderEncuestaModel.retrieve(client.db(), function(result) {
           db.close();
           Log.logEnd({ start : start , response: result});
           res.status(200).jsonp(result);
@@ -73,7 +73,7 @@ module.exports.detail = function (req, res) {
     Connection.ejecute(function(err, db){
         assert.equal(null, err);
         //ejecute query
-      ResponderEncuestaModel.detail(db, req.params.id, function(result) {
+      ResponderEncuestaModel.detail(client.db(), req.params.id, function(result) {
           db.close();
           Log.logEnd({ start : start , response: result});
           res.status(200).jsonp(result);
@@ -88,7 +88,7 @@ module.exports.update = function (req, res) {
   Connection.ejecute(function(err, db){
         assert.equal(null, err);
         //ejecute query
-          ResponderEncuestaModel.update(db, req.params.id, req.body, function(err, result, status) {
+          ResponderEncuestaModel.update(client.db(), req.params.id, req.body, function(err, result, status) {
               assert.equal(err, null);
               db.close();
               Log.logEnd({ start : start , response: result});
@@ -105,7 +105,7 @@ module.exports.replace = function (req, res) {
   Connection.ejecute(function(err, db){
         assert.equal(null, err);
         //ejecute query
-          ResponderEncuestaModel.replace(db, req.params.id, req.body, function(err, result, status) {
+          ResponderEncuestaModel.replace(client.db(), req.params.id, req.body, function(err, result, status) {
               assert.equal(err, null);
               db.close();
               Log.logEnd({ start : start , response: result});
@@ -122,7 +122,7 @@ module.exports.delete = function (req, res) {
   Connection.ejecute(function(err, db){
         assert.equal(null, err);
         //ejecute query
-          ResponderEncuestaModel.delete(db, req.params.id, function(err, result, status) {
+          ResponderEncuestaModel.delete(client.db(), req.params.id, function(err, result, status) {
               assert.equal(err, null);
               db.close();
               Log.logEnd({ start : start , response: result});
@@ -137,15 +137,15 @@ module.exports.indicadores = function (req, res) {
     var d   = new Date();
         start   = d.getMilliseconds();
         Log.logStart({controller : controller, method:'ResponderEncuesta.detail', d : d});
-    Connection.ejecute(function(err, db){
+    Connection.ejecute(function(err, client){
         assert.equal(null, err);
         //ejecute query
 
-        EncuestaModel.detail(db, req.params.id,function(encuesta, status){
+        EncuestaModel.detail(client.db(), req.params.id,function(encuesta, status){
 
           if(status === 200){
-                ResponderEncuestaModel.indicadores(db, encuesta, function(result) {
-                  db.close();
+                ResponderEncuestaModel.indicadores(client.db(), encuesta, function(result) {
+                  client.close();
                   Log.logEnd({ start : start , response: result});
                   res.status(200).jsonp(result);
               });

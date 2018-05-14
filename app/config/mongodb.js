@@ -7,13 +7,13 @@ var assert = require('assert');
 // Test connection
 module.exports.testConnection = function(callback){
 	callback.starting();
-    module.exports.ejecute(function(err, db) { 
+    module.exports.ejecute(function(err, db) {
         assert.equal(null, err);
         callback.success();
         db.close();
-    });
+	});
 };
 
 module.exports.ejecute = function (handler) {
-	MongoClient.connect(url, handler);
+	MongoClient.connect(url, { useNewUrlParser: true },handler);
 };
