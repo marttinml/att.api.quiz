@@ -125,8 +125,8 @@ module.exports.retrieve = function (db, callback) {
 module.exports.detail = function (db, id, callback) {
   var result = {};
   db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 1 }).count().then((n) => {
-    var code = 201;
     db.collection('encuestas').findOne({ id: Number(id) }).then(function (doc) {
+      var code = 201;
       if (doc != null) {
         result = doc;
         delete result._id;
