@@ -10,7 +10,9 @@ module.exports.create = function(db, data, callback) {
   if(valid){
       db.collection(collectionName).insertOne( {
           id              : Number(data.id),
-          name          : data.name,
+          name            : data.name,
+          img             :data.img,
+          description     :data.description,
           date            : new Date()
       }, function(err, result){
           // result.ops[0].id = result.ops[0]._id;
