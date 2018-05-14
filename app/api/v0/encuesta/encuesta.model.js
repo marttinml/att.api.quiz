@@ -35,8 +35,8 @@ module.exports.create = function (db, data, callback) {
             autor: data.autor,
             usuario: 0,
             date: new Date(),
-            attuid: data.attuid,
-            nombre: data.nombre
+            //attuid: data.attuid,
+            //nombre: data.nombre
           }, function (err, result) {
             // result.ops[0].id = result.ops[0]._id;
             delete result.ops[0]._id;

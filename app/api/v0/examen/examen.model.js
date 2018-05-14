@@ -188,10 +188,11 @@ module.exports.calificaciones = function (db, id, callback) {
             "encuesta.id": Number(id)
           }
       },
+      { "$unwind": "$preguntas" },
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", Nombre: "$encuesta.nombre", Examen: "$encuesta.titulo"
+            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", Nombre: "$encuesta.nombre", Examen: "$encuesta.titulo",preguntas:{ $size: "$preguntas" }
           }
       }
     ]
