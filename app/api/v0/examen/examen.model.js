@@ -35,8 +35,7 @@ module.exports.create = function (db, data, callback) {
             autor: data.autor,
             usuario: 0,
             date: new Date(),
-            attuid: data.attuid,
-            nombre: data.nombre
+            attuid: data.attuid
           }, function (err, result) {
             // result.ops[0].id = result.ops[0]._id;
             delete result.ops[0]._id;
@@ -83,6 +82,7 @@ module.exports.retrieve = function (db, callback) {
       var cursorTemp = db.collection("responder_encuesta").find({ "encuesta.id": Number(id) });
 
       cursorTemp.each(function (err, doc) {
+
         if (doc != null) {
           result[i].respondida++;
         } else {
@@ -124,10 +124,10 @@ module.exports.retrieve = function (db, callback) {
 };
 
 module.exports.detail = function (db, id, callback) {
+  var result = {};
   db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 1 }).count().then((n) => {
-    db.collection('encuestas').findOne({ id: Number(id) }).then(function (doc) {
-      var result = {};
-      var code = 201;
+    var code = 201;
+    db.collection('encuestas').find({ id: Number(id) }).each(function (err, doc) {
       if (doc != null) {
         result = doc;
         delete result._id;
@@ -135,8 +135,9 @@ module.exports.detail = function (db, id, callback) {
         result.date = new Date(result.date);
         result.respondida = n;
         code = 200;
+      } else {
+        callback(result, code);
       }
-      callback(result, code);
     });
   });
 };
@@ -174,5 +175,22 @@ module.exports.delete = function (db, id, callback) {
       }
     );
   });
+
+};
+
+module.exports.calificaciones = function (db, id, callback) {
+  var result = [];
+  var cursor = db.collection("responder_encuesta").find({ "encuesta.id": Number(id) });
+  
+  var code=200;
+  cursor.each(function (err, doc) {
+    if(doc!= null){
+    console.log(doc);
+    result.push(doc);
+    }
+    else{
+      callback(result, code);
+    }
+  });  
 
 };

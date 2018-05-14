@@ -34,6 +34,7 @@ module.exports = function(){
         require('../api' + VERSIONS[i] + 'tipo_encuesta/tipo_encuesta.router')(app);
         require('../api' + VERSIONS[i] + 'satisfaccion/satisfaccion.router')(app);
         require('../api' + VERSIONS[i] + 'responder_encuesta/responder_encuesta.router')(app);
+        require('../api' + VERSIONS[i] + 'examen/examen.router')(app);
     }
 
     return app;
