@@ -179,18 +179,29 @@ module.exports.delete = function (db, id, callback) {
 };
 
 module.exports.calificaciones = function (db, id, callback) {
-  var result = [];
-  var cursor = db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 0, "encuesta.attuid": 1, "encuesta.nombre": 1, "nombre": "$encuesta.nombre", "encuesta.titulo": 1 });
-  
-  var code=200;
-  cursor.each(function (err, doc) {
-    if(doc!= null){
-    console.log(doc);
-    result.push(doc);
-    }
-    else{
-      callback(result, code);
-    }
-  });  
+  db.collection("responder_encuesta").aggregate
+    (
+    [
+      {
+        "$match":
+          {
+            "encuesta.id": Number(id)
+          }
+      },
+      {
+        "$project":
+          {
+            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", Nombre: "$encuesta.nombre", Examen: "$encuesta.titulo"
+          }
+      }
+    ]
+    ).toArray(function (err, result) {
+      if (err) {
+        console.log(err);
+        callback([], 201)
+      } else {
+        callback(result, 200);
+      }
+    });
 
 };
