@@ -179,7 +179,8 @@ module.exports.delete = function (db, id, callback) {
 };
 
 module.exports.calificaciones = function (db, id, callback) {
-  db.collection("responder_encuesta").aggregate
+  var result = [];
+  var cursor = db.collection("responder_encuesta").aggregate
     (
     [
       {
@@ -188,21 +189,30 @@ module.exports.calificaciones = function (db, id, callback) {
             "encuesta.id": Number(id)
           }
       },
-      { "$unwind": "$preguntas" },
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", Nombre: "$encuesta.nombre", Examen: "$encuesta.titulo",preguntas:{ $size: "$preguntas" }
+            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", nombre: "$encuesta.nombre", examen: "$encuesta.titulo", calificacion: "$preguntas"
           }
       }
     ]
-    ).toArray(function (err, result) {
-      if (err) {
-        console.log(err);
-        callback([], 201)
-      } else {
-        callback(result, 200);
+    );
+  cursor.each(function (err, doc) {
+    if (doc != null) {
+      var correctas = 0;
+      for (let index = 0; index < doc.calificacion.length; index++) {
+        const element = doc.calificacion[index].respuesta;
+        if (element.id == 0) {
+          correctas++
+        }
       }
-    });
+      doc.calificacion = ((correctas / doc.calificacion.length) * 100).toFixed(2);
+      result.push(doc);
+    }
+    else {
+      cursor.close();
+      callback(result, 200);
+    }
+  });
 
 };
