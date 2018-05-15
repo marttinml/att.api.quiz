@@ -1,7 +1,6 @@
 var ObjectId = require('mongodb').ObjectID;
 var autoIncrement = require("mongodb-autoincrement");
 
-
 module.exports.create = function (db, data, callback) {
   //var valid = Util.validateModel(data, { required:['key'], number:['key'], string:['name','description'] });
   var valid = true;

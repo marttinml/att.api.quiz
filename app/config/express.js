@@ -2,6 +2,7 @@
 var express         = require("express"),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
+    json2xls = require('json2xls');
     app             = express();
 
 module.exports = function(){
@@ -26,6 +27,7 @@ module.exports = function(){
 
     app.use(bodyParser.json());
     app.use(methodOverride());
+    app.use(json2xls.middleware);
     
     for (i in VERSIONS) {
         require('../api' + VERSIONS[i] + 'test/test.router')(app);

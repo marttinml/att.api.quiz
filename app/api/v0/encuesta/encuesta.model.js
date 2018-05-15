@@ -129,6 +129,10 @@ module.exports.detail = function (db, id, callback) {
       var result = {};
       var code = 201;
       if (doc != null) {
+        //validar aqui la fecha
+        /*if(doc.){
+
+        }*/
         result = doc;
         delete result._id;
         result.valides = new Date(result.valides);
