@@ -5,7 +5,7 @@ var EncuestaModel = require('./examen.model'),
     Log = require('../../../shared/log'),
     merge = require('merge'),
     controller = 'test';
-
+var ResponderEncuestaModel = require('../responder_encuesta/responder_encuesta.model');
 (function () {
     // Connection.ejecute(function(err, db){
     //     assert.equal(null, err);
@@ -119,9 +119,31 @@ module.exports.responder_examen = function (req, res) {
     Connection.ejecute(function (err, client) {
         assert.equal(null, err);
         EncuestaModel.responder_examen(client.db(), req.body, function (result, status) {
-            client.close();
-            Log.logEnd({ start: start, response: result });
-            res.status(status).jsonp(result);
+
+            EncuestaModel.detail(client.db(), result.idEncuesta, function (encuesta, status) {
+
+                if (status === 200) {
+
+
+                    var data = {
+                        encuesta: encuesta,
+                        preguntasList: result.preguntas,
+                        tipoEncuesta: encuesta.tipoEncuesta,
+                        attuid: result.attuid,
+                        nombre: result.nombre
+                    };
+                    ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
+                        assert.equal(err, null);
+                        client.close();
+                        Log.logEnd({ start: start, response: result });
+                        res.status(status).jsonp(result);
+                    });
+
+                } else {
+                    res.status(201).jsonp(req.body);
+                };
+
+            });
         });
     });
 };
@@ -152,7 +174,7 @@ module.exports.calificaciones_excel = function (req, res) {
             if (status === 200 && result.length) {
                 client.close();
                 Log.logEnd({ start: start, response: result });
-                res.xls("Examen-"+req.params.id + '.xlsx', result);
+                res.xls("Examen-" + req.params.id + '.xlsx', result);
             }
             else {
                 res.status(201).jsonp({ "error": "No se puede crear excel" });
