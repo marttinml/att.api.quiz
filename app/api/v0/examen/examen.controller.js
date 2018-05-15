@@ -112,6 +112,20 @@ module.exports.delete = function (req, res) {
     });
 };
 
+module.exports.responder_examen = function (req, res) {
+    var d = new Date();
+    start = d.getMilliseconds();
+    Log.logStart({ controller: controller, method: 'Examen.calificaciones', d: d, body: req.params.id });
+    Connection.ejecute(function (err, client) {
+        assert.equal(null, err);
+        EncuestaModel.responder_examen(client.db(), req.body, function (result, status) {
+            client.close();
+            Log.logEnd({ start: start, response: result });
+            res.status(status).jsonp(result);
+        });
+    });
+};
+
 module.exports.calificaciones = function (req, res) {
     var d = new Date();
     start = d.getMilliseconds();
@@ -138,7 +152,7 @@ module.exports.calificaciones_excel = function (req, res) {
             if (status === 200 && result.length) {
                 client.close();
                 Log.logEnd({ start: start, response: result });
-                res.xls(req.params.id + '.xlsx', result);
+                res.xls("Examen-"+req.params.id + '.xlsx', result);
             }
             else {
                 res.status(201).jsonp({ "error": "No se puede crear excel" });

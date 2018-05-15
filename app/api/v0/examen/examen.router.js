@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.route('/v0/examen/:id').get(Examen.detail);
     app.route('/v0/calificaciones/:id').get(Examen.calificaciones);
     app.route('/v0/calificaciones_excel/:id').get(Examen.calificaciones_excel);
+    app.route('/v0/responder_examen').post(Examen.responder_examen);
     app.route('/v0/examen/:id').patch(Examen.update);
     app.route('/v0/examen/:id').put(Examen.replace);
     app.route('/v0/examen/:id').delete(Examen.delete);

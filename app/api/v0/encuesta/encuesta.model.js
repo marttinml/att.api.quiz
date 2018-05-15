@@ -124,25 +124,21 @@ module.exports.retrieve = function (db, callback) {
 };
 
 module.exports.detail = function (db, id, callback) {
-  db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 1 }).count().then((n) => {
+  //db.collection("responder_encuesta").find({ "encuesta.id": Number(id) }).project({ _id: 1 }).count().then((n) => {
     db.collection('encuestas').findOne({ id: Number(id) }).then(function (doc) {
       var result = {};
       var code = 201;
       if (doc != null) {
-        //validar aqui la fecha
-        /*if(doc.){
-
-        }*/
         result = doc;
         delete result._id;
         result.valides = new Date(result.valides);
         result.date = new Date(result.date);
-        result.respondida = n;
+        //result.respondida = n;
         code = 200;
       }
       callback(result, code);
     });
-  });
+  //});
 };
 
 module.exports.update = function (db, id, data, callback) {

@@ -191,7 +191,7 @@ module.exports.calificaciones = function (db, id, callback) {
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$encuesta.attuid", nombre: "$encuesta.nombre", examen: "$encuesta.titulo", calificacion: "$preguntas"
+            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", nombre: "$nombre", examen: "$encuesta.titulo", calificacion: "$preguntas"
           }
       }
     ]
@@ -211,6 +211,55 @@ module.exports.calificaciones = function (db, id, callback) {
     else {
       cursor.close();
       callback(result, 200);
+    }
+  });
+
+};
+
+module.exports.responder_examen = function (db, body, callback) {
+
+  var result = {};
+  var code = 201;
+  var cursor = db.collection("encuestas").aggregate
+    (
+    [
+      {
+        "$match":
+          {
+            "id": Number(body.id)
+          }
+      },
+      {
+        "$project":
+          {
+            _id: 0, idEncuesta: "$id", preguntas: 1
+          }
+      }
+    ]
+    );
+
+  cursor.each(function (err, doc) {
+    if (doc != null) {
+      for (let pregsindex = 0; pregsindex < doc.preguntas.length; pregsindex++) {
+        var respuestacorrecta;
+        for (let pregindex = 0; pregindex < doc.preguntas[pregsindex].respuestas.length; pregindex++) {
+          doc.preguntas[pregsindex].respuestas[pregindex].selected = false;
+          doc.preguntas[pregsindex].respuestas[pregindex].select = false;
+          if (doc.preguntas[pregsindex].respuestas[pregindex].id == 0) {
+            doc.preguntas[pregsindex].respuestas[pregindex].select = true;
+            respuestacorrecta = doc.preguntas[pregsindex].respuestas[pregindex];
+          }
+        }
+        doc.preguntas[pregsindex].respuesta = respuestacorrecta;
+      }
+      doc.attuid = body.attuid;
+      doc.nombre = body.nombre;
+      code = 200;
+      result = doc;
+    }
+    else {
+      cursor.close();
+      callback(result, code);
     }
   });
 
