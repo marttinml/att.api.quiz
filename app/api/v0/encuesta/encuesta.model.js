@@ -128,7 +128,6 @@ module.exports.retrieve = function (db, callback) {
 };
 
 module.exports.detail = function (db, id, callback) {
-  console.log('testerman');
   db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
     var result = {
       success: false,
