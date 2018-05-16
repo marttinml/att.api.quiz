@@ -164,7 +164,7 @@ module.exports.detail = function (db, id, callback) {
 };
 
 module.exports.detail_sincategorias = function (db, id, callback) {
-  db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 ,"preguntas.respuestas.categoria":0} }).then(function (doc) {
+  db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
     var result = {
       success: false,
       msjError: "No disponible",
@@ -179,6 +179,11 @@ module.exports.detail_sincategorias = function (db, id, callback) {
         case 3:
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
+            for (let index = 0; index < doc.preguntas.length; index++) {
+              for (let index2 = 0; index2 < doc.preguntas[index].respuestas.length; index2++) {
+                delete doc.preguntas[index].respuestas[index2].categoria;
+              }
+            }
           }
           break;
         default:
