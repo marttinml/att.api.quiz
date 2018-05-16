@@ -124,17 +124,17 @@ module.exports.retrieve = function (db, callback) {
 
 module.exports.detail = function (db, id, callback) {
   db.collection('encuestas').findOne({ id: Number(id) }).then(function (doc) {
-      var result = {};
-      var code = 201;
-      if (doc != null) {
-        result = doc;
-        delete result._id;
-        result.valides = new Date(result.valides);
-        result.date = new Date(result.date);
-        code = 200;
-      }
-      callback(result, code);
-    });
+    var result = {};
+    var code = 201;
+    if (doc != null) {
+      result = doc;
+      delete result._id;
+      result.valides = new Date(result.valides);
+      result.date = new Date(result.date);
+      code = 200;
+    }
+    callback(result, code);
+  });
 };
 
 module.exports.update = function (db, id, data, callback) {
@@ -258,5 +258,45 @@ module.exports.responder_examen = function (db, body, callback) {
       callback(result, code);
     }
   });
+
+};
+
+module.exports.responder_exist = function (db, data, callback) {
+  var result = {
+    success: false,
+    msjError: "No disponible",
+    data: {}
+  }
+
+  if (data.tipoEncuesta.id === 3) {
+    var insert = {
+      encuesta: data.encuesta,
+      preguntas: data.preguntasList,
+      tipoEncuesta: data.tipoEncuesta,
+      usuario: 0,
+      date: new Date(),
+      attuid: data.attuid,
+      nombre: data.nombre
+    };
+
+    db.collection("responder_encuesta").replaceOne(
+      { "encuesta.id": Number(insert.encuesta.id), "attuid": insert.attuid }, insert,{ upsert: true }, function (err, response) {
+        result.success = true;
+        result.msjError = "";
+
+        var correctas = 0;
+        for (let index = 0; index < data.preguntasList.length; index++) {
+          const element = data.preguntasList[index].respuesta;
+          console.log(element);
+          if (element.id == 0) {
+            correctas++
+          }
+        }
+
+        result.data = { "calificacion": ((correctas / data.preguntasList.length) * 100).toFixed(2) };
+        callback(result, 200);
+      }
+    );
+  }
 
 };

@@ -123,8 +123,6 @@ module.exports.responder_examen = function (req, res) {
             EncuestaModel.detail(client.db(), result.idEncuesta, function (encuesta, status) {
 
                 if (status === 200) {
-
-
                     var data = {
                         encuesta: encuesta,
                         preguntasList: result.preguntas,
@@ -132,8 +130,7 @@ module.exports.responder_examen = function (req, res) {
                         attuid: result.attuid,
                         nombre: result.nombre
                     };
-                    ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
-                        assert.equal(err, null);
+                    EncuestaModel.responder_exist(client.db(), data, function (result, status) {
                         client.close();
                         Log.logEnd({ start: start, response: result });
                         res.status(status).jsonp(result);
