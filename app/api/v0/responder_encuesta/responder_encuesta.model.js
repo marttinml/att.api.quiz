@@ -218,3 +218,22 @@ module.exports.validar_examen = function (db, idencuesta, attuid, callback) {
 
 }
 
+
+
+module.exports.detail_indicadores = function (db, id, callback) {
+    db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
+      var result = {
+        success: false,
+        msjError: "No disponible",
+        data: {}
+      }
+      var code = 201;
+      if (doc != null) {
+          result.success = true;
+          result.msjError = "";
+          result.data = doc;
+          code = 200;
+      }
+      callback(result, code);
+    });
+  };

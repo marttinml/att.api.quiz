@@ -53,7 +53,7 @@ module.exports.detail = function (req, res) {
     Connection.ejecute(function(err, client){
       assert.equal(null, err);
         //ejecute query
-      EncuestaModel.detail(client.db(), req.params.id, function(result, status) {
+      EncuestaModel.detail_sincategorias(client.db(), req.params.id, function(result, status) {
           client.close();
           Log.logEnd({ start : start , response: result});
           res.status(status).jsonp(result);

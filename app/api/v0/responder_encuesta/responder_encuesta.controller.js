@@ -173,7 +173,7 @@ module.exports.indicadores = function (req, res) {
         assert.equal(null, err);
         //ejecute query
 
-        EncuestaModel.detail(client.db(), req.params.id, function (encuesta, status) {
+        ResponderEncuestaModel.detail_indicadores(client.db(), req.params.id, function (encuesta, status) {
 
             if (encuesta.success) {
                 ResponderEncuestaModel.indicadores(client.db(), encuesta.data, function (result) {
