@@ -3,28 +3,50 @@ var collectionName = "responder_encuesta";
 
 
 module.exports.create = function (db, data, callback) {
-    //var valid = Util.validateModel(data, { required:['key'], number:['key'], string:['name','description'] });
-    var valid = true;
-
-    if (valid) {
-        db.collection(collectionName).insertOne({
-            encuesta: data.encuesta,
-            preguntas: data.preguntasList,
-            tipoEncuesta: data.tipoEncuesta,
-            usuario: 0,
-            date: new Date(),
-            attuid: data.attuid,
-            nombre: data.nombre
-        }, function (err, result) {
-            result.ops[0].id = result.ops[0]._id;
-            delete result.ops[0]._id;
-            delete result.ops[0].date;
-            callback(err, result.ops[0], 200);
-        });
-
-    } else {
-        callback(null, 'Invalid Model', 201);
+    var result = {
+        success: false,
+        msjError: "No disponible",
+        data: {}
     }
+
+    var examen = false;
+    if (data.tipoEncuesta.id === 3) {
+        examen = true;
+    }
+
+    var insert = {
+        encuesta: data.encuesta,
+        preguntas: data.preguntasList,
+        tipoEncuesta: data.tipoEncuesta,
+        usuario: 0,
+        date: new Date()
+    };
+    if (examen) {
+        insert.attuid = data.attuid,
+            insert.nombre = data.nombre
+    }
+
+    db.collection(collectionName).insertOne(insert, function (err, response) {
+
+        result.success = true;
+        result.msjError = "";
+
+        if (examen) {
+            var correctas = 0;
+            for (let index = 0; index < data.preguntasList.length; index++) {
+                const element = data.preguntasList[index].respuesta;
+                console.log(element);
+                if (element.id == 0) {
+                    correctas++
+                }
+            }
+
+            result.data = { "calificacion": ((correctas / data.preguntasList.length) * 100).toFixed(2) };
+        }
+
+        callback(err, result, 200);
+    });
+
 };
 
 module.exports.retrieve = function (db, callback) {
@@ -179,4 +201,20 @@ module.exports.indicadores = function (db, encuesta, callback) {
     });
 };
 
+module.exports.validar_examen = function (db, idencuesta, attuid, callback) {
+    var result = {
+        success: false,
+        msjError: "Ha ha ha, no dijiste la palabra magica",
+        data: {}
+    }
+    db.collection("responder_encuesta").findOne({ "encuesta.id": Number(idencuesta), "attuid": attuid }, { fields: { _id: 1 } }).then(function (doc) {
+
+        if (!(doc != null)) {
+            result.success = true;
+        }
+        callback(200, result);
+    });
+
+
+}
 

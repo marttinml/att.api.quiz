@@ -1,7 +1,6 @@
 var ObjectId = require('mongodb').ObjectID;
 var autoIncrement = require("mongodb-autoincrement");
 
-
 module.exports.create = function (db, data, callback) {
   //var valid = Util.validateModel(data, { required:['key'], number:['key'], string:['name','description'] });
   var valid = true;
@@ -21,6 +20,9 @@ module.exports.create = function (db, data, callback) {
         preguntasList.push(pregunta);
       }
 
+      console.log(new Date(data.valides));
+      console.log(data.valides);
+
       switch (tipoEncuestaObj.id) {
         case 3:
           db.collection(collectionName).insertOne({
@@ -35,6 +37,7 @@ module.exports.create = function (db, data, callback) {
             autor: data.autor,
             usuario: 0,
             date: new Date(),
+            vigenciaInicio: new Date(data.vigenciaInicio)
             //attuid: data.attuid,
             //nombre: data.nombre
           }, function (err, result) {
@@ -57,7 +60,8 @@ module.exports.create = function (db, data, callback) {
             preguntas: preguntasList,
             autor: data.autor,
             usuario: 0,
-            date: new Date()
+            date: new Date(),
+            vigenciaInicio: new Date(data.vigenciaInicio)
           }, function (err, result) {
             // result.ops[0].id = result.ops[0]._id;
             delete result.ops[0]._id;
@@ -125,13 +129,35 @@ module.exports.retrieve = function (db, callback) {
 
 module.exports.detail = function (db, id, callback) {
   db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
-    var result = {};
+    var result = {
+      success: false,
+      msjError: "No disponible",
+      data: {}
+    }
     var code = 201;
     if (doc != null) {
-      if (!(new Date().getTime() > new Date(doc.valides).getTime())) {
-        result = doc;
+      var ahora = new Date();
+      ahora.setHours(ahora.getHours() - 5);
+      var esvalida = false;
+      switch (doc.tipoEncuesta.id) {
+        case 3:
+          if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
+            esvalida = true;
+          }
+          break;
+        default:
+          if (ahora.getTime() <= doc.valides.getTime()) {
+            esvalida = true;
+          }
+          break;
+      }
+      if (esvalida) {
+        result.success = true;
+        result.msjError = "";
+        result.data = doc;
         code = 200;
       }
+
     }
     callback(result, code);
   });

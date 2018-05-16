@@ -11,6 +11,7 @@
         "mongodb-autoincrement": "~1.0.1"
     },
     "engines": {
-        "node": "10.1.0"
+        "node": "10.1.0",
+        "npm": "6.0.1"
     }
 }
