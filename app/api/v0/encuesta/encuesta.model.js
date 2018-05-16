@@ -128,7 +128,7 @@ module.exports.retrieve = function (db, callback) {
 };
 
 module.exports.detail = function (db, id, callback) {
-  db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
+  db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 ,"preguntas.respuestas.categoria":0} }).then(function (doc) {
     var result = {
       success: false,
       msjError: "No disponible",
