@@ -23,37 +23,62 @@ module.exports.create = function (req, res) {
     Connection.ejecute(function (err, client) {
         assert.equal(null, err);
 
-        ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
-            if (response.success) {
-                EncuestaModel.detail(client.db(), req.body.idEncuesta, function (encuesta, status) {
+        //ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
+        // if (response.success) {
+        EncuestaModel.detail(client.db(), req.body.idEncuesta, function (encuesta, status) {
 
-                    if (encuesta.success) {
+            if (encuesta.success) {
 
-                        var data = {
-                            encuesta: encuesta.data,
-                            preguntasList: req.body.preguntas,
-                            tipoEncuesta: encuesta.data.tipoEncuesta,
-                            attuid: req.body.attuid,
-                            nombre: req.body.nombre
-                        };
-                        ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
-                            assert.equal(err, null);
-                            client.close();
-                            Log.logEnd({ start: start, response: result });
-                            //response
-                            res.status(status).jsonp(result);
-                        });
+                if (encuesta.data.tipoEncuesta.id === 3) {
+                    ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
+                        if (response.success) {
+                            var data = {
+                                encuesta: encuesta.data,
+                                preguntasList: req.body.preguntas,
+                                tipoEncuesta: encuesta.data.tipoEncuesta,
+                                attuid: req.body.attuid,
+                                nombre: req.body.nombre
+                            };
+                            ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
+                                assert.equal(err, null);
+                                client.close();
+                                Log.logEnd({ start: start, response: result });
+                                //response
+                                res.status(status).jsonp(result);
+                            });
 
-                    } else {
-                        res.status(status).jsonp(encuesta);
+                        }
+                        else {
+                            res.status(status).jsonp(response);
+                        }
+                    });
+                }
+                else {
+                    var data = {
+                        encuesta: encuesta.data,
+                        preguntasList: req.body.preguntas,
+                        tipoEncuesta: encuesta.data.tipoEncuesta,
+                        attuid: req.body.attuid,
+                        nombre: req.body.nombre
                     };
+                    ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
+                        assert.equal(err, null);
+                        client.close();
+                        Log.logEnd({ start: start, response: result });
+                        //response
+                        res.status(status).jsonp(result);
+                    });
+                }
+            } else {
+                res.status(status).jsonp(encuesta);
+            };
 
-                });
-            }
-            else {
-                res.status(status).jsonp(response);
-            }
         });
+        // }
+        // else {
+        //     res.status(status).jsonp(response);
+        // }
+        //});
 
     });
 };
