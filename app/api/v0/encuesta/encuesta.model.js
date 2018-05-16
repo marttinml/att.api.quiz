@@ -143,42 +143,6 @@ module.exports.detail = function (db, id, callback) {
         case 3:
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
-          }
-          break;
-        default:
-          if (ahora.getTime() <= doc.valides.getTime()) {
-            esvalida = true;
-          }
-          break;
-      }
-      if (esvalida) {
-        result.success = true;
-        result.msjError = "";
-        result.data = doc;
-        code = 200;
-      }
-
-    }
-    callback(result, code);
-  });
-};
-
-module.exports.detail_sincategorias = function (db, id, callback) {
-  db.collection('encuestas').findOne({ id: Number(id) }, { fields: { _id: 0 } }).then(function (doc) {
-    var result = {
-      success: false,
-      msjError: "No disponible",
-      data: {}
-    }
-    var code = 201;
-    if (doc != null) {
-      var ahora = new Date();
-      ahora.setHours(ahora.getHours() - 5);
-      var esvalida = false;
-      switch (doc.tipoEncuesta.id) {
-        case 3:
-          if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
-            esvalida = true;
             for (let index = 0; index < doc.preguntas.length; index++) {
               for (let index2 = 0; index2 < doc.preguntas[index].respuestas.length; index2++) {
                 delete doc.preguntas[index].respuestas[index2].categoria;
