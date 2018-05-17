@@ -143,11 +143,11 @@ module.exports.detail = function (db, id, callback) {
         case 3:
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
-            for (let index = 0; index < doc.preguntas.length; index++) {
+            /*for (let index = 0; index < doc.preguntas.length; index++) {
               for (let index2 = 0; index2 < doc.preguntas[index].respuestas.length; index2++) {
                 delete doc.preguntas[index].respuestas[index2].categoria;
               }
-            }
+            }*/
           }
           break;
         default:
