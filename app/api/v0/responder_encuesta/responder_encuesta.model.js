@@ -182,7 +182,9 @@ module.exports.indicadores = function (db, encuesta, callback) {
         } else {
             for (var j in encuesta.graficas) {
                 var categoria = encuesta.graficas[j];
+                console.log(categoria.porcentaje);
                 categoria.porcentaje = ((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0;
+                console.log(categoria.porcentaje);
                 categoria.porcentaje = Math.round(categoria.porcentaje);
             }
 
