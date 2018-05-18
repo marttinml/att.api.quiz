@@ -141,6 +141,7 @@ module.exports.detail = function (db, id, callback) {
       var esvalida = false;
       switch (doc.tipoEncuesta.id) {
         case 3:
+        result.msjError = "La vigencia de este examen ya ha expirado"
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
             /*for (let index = 0; index < doc.preguntas.length; index++) {
@@ -151,6 +152,7 @@ module.exports.detail = function (db, id, callback) {
           }
           break;
         default:
+        result.msjError = "La vigencia de esta encuesta ya ha expirado"
           if (ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
           }
