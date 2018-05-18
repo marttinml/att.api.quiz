@@ -128,6 +128,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
         encuesta.graficas[i] = {};
         encuesta.graficas[i].name = encuesta.tipoEncuesta.id === 1 ? respuesta.name : respuesta.categoria;
         encuesta.graficas[i].porcentaje = 0;
+        encuesta.graficas[i].id = encuesta.tipoEncuesta.id;
     }
 
     // new
@@ -145,6 +146,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
             delete doc._id;
             delete doc.date;
 
+
             // new
             for (var i in doc.preguntas) {
                 var preguntaRespondida = doc.preguntas[i];
@@ -155,9 +157,11 @@ module.exports.indicadores = function (db, encuesta, callback) {
                     var respuesta = pregunta.respuestas[j];
                     var respuestaNameTemp = encuesta.tipoEncuesta.id === 1 ? respuesta.name : respuesta.categoria;
 
-                    if (respuestaName === respuestaNameTemp) {
+                    if (preguntaRespondida.respuesta.id === respuesta.id) {
                         respuesta.porcentaje++;
                     }
+
+
                 }
 
             }
@@ -167,15 +171,15 @@ module.exports.indicadores = function (db, encuesta, callback) {
 
                 for (var j in encuesta.graficas) {
                     var categoria = encuesta.graficas[j];
-                    if (encuesta.tipoEncuesta.id === 1) {
-                        if (categoria.name === pregunta.respuesta.name) {
+                    //if (encuesta.tipoEncuesta.id === 1) {
+                        if (categoria.id === pregunta.respuesta.id) {
                             categoria.porcentaje++;
                         }
-                    } else {
+                   /* } else {
                         if (categoria.name === pregunta.respuesta.categoria) {
                             categoria.porcentaje++;
                         }
-                    }
+                    }*/
                 }
             }
             encuesta.respondida++;
@@ -186,6 +190,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
                 categoria.porcentaje = ((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0;
                 console.log(categoria.porcentaje);
                 categoria.porcentaje = Math.round(categoria.porcentaje);
+                console.log(categoria.porcentaje);
             }
 
             // new
@@ -194,6 +199,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
                 for (var j in pregunta.respuestas) {
                     var respuesta = pregunta.respuestas[j];
                     var porcentaje = respuesta.porcentaje;
+                    console.log(categoria.porcentaje);
                     respuesta.porcentaje = (porcentaje / encuesta.respondida) * 100;
                     respuesta.porcentaje = Math.round(respuesta.porcentaje);
                 }
@@ -206,7 +212,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
 module.exports.validar_examen = function (db, idencuesta, attuid, callback) {
     var result = {
         success: false,
-        msjError: "Este "+ attuid +"ya respondio el examen anteriormente",
+        msjError: "Este "+ attuid +" ya respondio el examen anteriormente",
         data: {}
     }
     db.collection("responder_encuesta").findOne({ "encuesta.id": Number(idencuesta), "attuid": attuid }, { fields: { _id: 1 } }).then(function (doc) {
