@@ -128,7 +128,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
         encuesta.graficas[i] = {};
         encuesta.graficas[i].name = encuesta.tipoEncuesta.id === 1 ? respuesta.name : respuesta.categoria;
         encuesta.graficas[i].porcentaje = 0;
-        encuesta.graficas[i].id = encuesta.tipoEncuesta.id;
+        encuesta.graficas[i].id = respuesta.id;
     }
 
     // new
@@ -186,11 +186,8 @@ module.exports.indicadores = function (db, encuesta, callback) {
         } else {
             for (var j in encuesta.graficas) {
                 var categoria = encuesta.graficas[j];
-                console.log(categoria.porcentaje);
-                categoria.porcentaje = ((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0;
-                console.log(categoria.porcentaje);
-                categoria.porcentaje = Math.round(categoria.porcentaje);
-                console.log(categoria.porcentaje);
+                categoria.porcentaje = (((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0).toFixed(2);
+                //categoria.porcentaje = Math.round(categoria.porcentaje);
             }
 
             // new
@@ -199,9 +196,8 @@ module.exports.indicadores = function (db, encuesta, callback) {
                 for (var j in pregunta.respuestas) {
                     var respuesta = pregunta.respuestas[j];
                     var porcentaje = respuesta.porcentaje;
-                    console.log(categoria.porcentaje);
-                    respuesta.porcentaje = (porcentaje / encuesta.respondida) * 100;
-                    respuesta.porcentaje = Math.round(respuesta.porcentaje);
+                    respuesta.porcentaje = ((porcentaje / encuesta.respondida) * 100).toFixed(2);
+                    //respuesta.porcentaje = Math.round(respuesta.porcentaje);
                 }
             }
             callback(encuesta);
