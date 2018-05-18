@@ -9,4 +9,6 @@ module.exports = function (app) {
     app.route('/v0/responder-encuesta/:id').delete(ResponderEncuesta.delete);
 
     app.route('/v0/indicadores/:id').get(ResponderEncuesta.indicadores);
+
+    app.route('/v0/validar_examen').post(ResponderEncuesta.validar_examen);
 };

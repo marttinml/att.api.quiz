@@ -182,3 +182,21 @@ module.exports.indicadores = function (req, res) {
     });
 };
 
+module.exports.validar_examen = function (req, res) {
+    var d = new Date();
+    start = d.getMilliseconds();
+    Log.logStart({ controller: controller, method: 'ResponderEncuesta.validar_examen', d: d, body: req.body });
+
+    Connection.ejecute(function (err, client) {
+        assert.equal(null, err);
+
+        ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
+            if (response.success) {
+                response.success = false;
+            }
+            res.status(status).jsonp(response);
+
+        });
+
+    });
+};
