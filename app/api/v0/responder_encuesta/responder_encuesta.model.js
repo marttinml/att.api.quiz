@@ -186,8 +186,8 @@ module.exports.indicadores = function (db, encuesta, callback) {
         } else {
             for (var j in encuesta.graficas) {
                 var categoria = encuesta.graficas[j];
-                categoria.porcentaje = (((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0).toFixed(2);
-                //categoria.porcentaje = Math.round(categoria.porcentaje);
+                categoria.porcentaje = ((categoria.porcentaje / (encuesta.respondida * encuesta.preguntas.length)) * 100) || 0;
+                categoria.porcentaje = Math.round(categoria.porcentaje);
             }
 
             // new
@@ -196,8 +196,8 @@ module.exports.indicadores = function (db, encuesta, callback) {
                 for (var j in pregunta.respuestas) {
                     var respuesta = pregunta.respuestas[j];
                     var porcentaje = respuesta.porcentaje;
-                    respuesta.porcentaje = ((porcentaje / encuesta.respondida) * 100).toFixed(2);
-                    //respuesta.porcentaje = Math.round(respuesta.porcentaje);
+                    respuesta.porcentaje = (porcentaje / encuesta.respondida) * 100;
+                    respuesta.porcentaje = Math.round(respuesta.porcentaje);
                 }
             }
             callback(encuesta);
