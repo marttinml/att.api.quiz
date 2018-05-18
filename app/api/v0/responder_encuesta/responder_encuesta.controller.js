@@ -23,8 +23,6 @@ module.exports.create = function (req, res) {
     Connection.ejecute(function (err, client) {
         assert.equal(null, err);
 
-        //ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
-        // if (response.success) {
         EncuestaModel.detail(client.db(), req.body.idEncuesta, function (encuesta, status) {
 
             if (encuesta.success) {
@@ -74,11 +72,6 @@ module.exports.create = function (req, res) {
             };
 
         });
-        // }
-        // else {
-        //     res.status(status).jsonp(response);
-        // }
-        //});
 
     });
 };
