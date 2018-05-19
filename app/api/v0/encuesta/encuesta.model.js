@@ -150,6 +150,9 @@ module.exports.detail = function (db, id, callback) {
               }
             }*/
           }
+          else if(ahora.getTime() < doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()){
+            result.msjError = "El examen aun no ha iniciado"
+          }
           break;
         default:
         result.msjError = "La vigencia de esta encuesta ya ha expirado"

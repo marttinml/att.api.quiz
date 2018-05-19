@@ -208,7 +208,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
 module.exports.validar_examen = function (db, idencuesta, attuid, callback) {
     var result = {
         success: false,
-        msjError: "Este attuid: "+ attuid +" ya respondio el examen anteriormente",
+        msjError: "Este attuid: "+ attuid +" ya respondió el examen anteriormente",
         data: {}
     }
     db.collection("responder_encuesta").findOne({ "encuesta.id": Number(idencuesta), "attuid": attuid }, { fields: { _id: 1 } }).then(function (doc) {
