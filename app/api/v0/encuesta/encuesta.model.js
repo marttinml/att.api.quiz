@@ -144,11 +144,6 @@ module.exports.detail = function (db, id, callback) {
           result.msjError = "La vigencia de este examen ya ha expirado"
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
-            /*for (let index = 0; index < doc.preguntas.length; index++) {
-              for (let index2 = 0; index2 < doc.preguntas[index].respuestas.length; index2++) {
-                delete doc.preguntas[index].respuestas[index2].categoria;
-              }
-            }*/
           }
           else if (ahora.getTime() < doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             result.msjError = "El examen aun no ha iniciado"
