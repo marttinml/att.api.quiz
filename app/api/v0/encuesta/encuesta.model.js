@@ -156,7 +156,7 @@ module.exports.detail = function (db, id, callback) {
           break;
         default:
         result.msjError = "La vigencia de esta encuesta ya ha expirado"
-          if (ahora.getTime() <= doc.valides.getTime()) {
+          if (ahora.getTime() >= doc.vigenciaInicio.getTime()&&ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
           }
           break;
