@@ -141,7 +141,7 @@ module.exports.detail = function (db, id, callback) {
       var esvalida = false;
       switch (doc.tipoEncuesta.id) {
         case 3:
-        result.msjError = "La vigencia de este examen ya ha expirado"
+          result.msjError = "La vigencia de este examen ya ha expirado"
           if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
             /*for (let index = 0; index < doc.preguntas.length; index++) {
@@ -150,14 +150,17 @@ module.exports.detail = function (db, id, callback) {
               }
             }*/
           }
-          else if(ahora.getTime() < doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()){
+          else if (ahora.getTime() < doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             result.msjError = "El examen aun no ha iniciado"
           }
           break;
         default:
-        result.msjError = "La vigencia de esta encuesta ya ha expirado"
-          if (ahora.getTime() >= doc.vigenciaInicio.getTime()&&ahora.getTime() <= doc.valides.getTime()) {
+          result.msjError = "La vigencia de esta encuesta ya ha expirado"
+          if (ahora.getTime() >= doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
             esvalida = true;
+          }
+          else if (ahora.getTime() < doc.vigenciaInicio.getTime() && ahora.getTime() <= doc.valides.getTime()) {
+            result.msjError = "La encuesta aun no ha iniciado"
           }
           break;
       }
