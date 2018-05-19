@@ -190,10 +190,7 @@ module.exports.validar_examen = function (req, res) {
     Connection.ejecute(function (err, client) {
         assert.equal(null, err);
 
-        ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
-            if (response.success) {
-                response.success = false;
-            }
+        ResponderEncuestaModel.validar_examensolo(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
             res.status(status).jsonp(response);
 
         });

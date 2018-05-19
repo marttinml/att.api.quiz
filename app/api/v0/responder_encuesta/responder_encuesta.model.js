@@ -241,3 +241,19 @@ module.exports.detail_indicadores = function (db, id, callback) {
       callback(result, code);
     });
   };
+
+  module.exports.validar_examensolo = function (db, idencuesta, attuid, callback) {
+    var result = {
+        success: false,
+        msjError: "Este attuid: "+ attuid +" ya respondio el examen anteriormente",
+        data: {}
+    }
+    db.collection("responder_encuesta").findOne({ "encuesta.id": Number(idencuesta), "attuid": attuid }, { fields: { _id: 1 } }).then(function (doc) {
+
+        if (doc == null) {
+            result.success = true;
+            result.msjError="";
+        }
+        callback(200, result);
+    });
+}
