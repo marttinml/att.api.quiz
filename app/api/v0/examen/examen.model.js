@@ -234,16 +234,28 @@ module.exports.responder_examen = function (db, body, callback) {
     ]
     );
 
+
+
+
   cursor.each(function (err, doc) {
     if (doc != null) {
+
       for (let pregsindex = 0; pregsindex < doc.preguntas.length; pregsindex++) {
         var respuestacorrecta;
         for (let pregindex = 0; pregindex < doc.preguntas[pregsindex].respuestas.length; pregindex++) {
           doc.preguntas[pregsindex].respuestas[pregindex].selected = false;
           doc.preguntas[pregsindex].respuestas[pregindex].select = false;
-          if (doc.preguntas[pregsindex].respuestas[pregindex].id == 0) {
-            doc.preguntas[pregsindex].respuestas[pregindex].select = true;
-            respuestacorrecta = doc.preguntas[pregsindex].respuestas[pregindex];
+          if (pregsindex < body.respuestasOK) {
+
+            if (doc.preguntas[pregsindex].respuestas[pregindex].id == 0) {
+              doc.preguntas[pregsindex].respuestas[pregindex].select = true;
+              respuestacorrecta = doc.preguntas[pregsindex].respuestas[pregindex];
+            }
+          }
+          else {
+            if (doc.preguntas[pregsindex].respuestas[pregindex].id == 1) {
+              respuestacorrecta = doc.preguntas[pregsindex].respuestas[pregindex];
+            }
           }
         }
         doc.preguntas[pregsindex].respuesta = respuestacorrecta;
@@ -279,8 +291,11 @@ module.exports.responder_exist = function (db, data, callback) {
       nombre: data.nombre
     };
 
+
+    console.log(data);
+
     db.collection("responder_encuesta").replaceOne(
-      { "encuesta.id": Number(insert.encuesta.id), "attuid": insert.attuid }, insert,{ upsert: true }, function (err, response) {
+      { "encuesta.id": Number(insert.encuesta.id), "attuid": insert.attuid }, insert, { upsert: true }, function (err, response) {
         result.success = true;
         result.msjError = "";
 
