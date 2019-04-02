@@ -27,7 +27,7 @@ module.exports.create = function (req, res) {
 
             if (encuesta.success) {
 
-                if (encuesta.data.tipoEncuesta.id === 3) {
+                if (encuesta.data.tipoEncuesta.id === 3 || encuesta.data.tipoEncuesta.id === 4 ) {
                     ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
                         if (response.success) {
                             var data = {
@@ -35,7 +35,8 @@ module.exports.create = function (req, res) {
                                 preguntasList: req.body.preguntas,
                                 tipoEncuesta: encuesta.data.tipoEncuesta,
                                 attuid: req.body.attuid,
-                                nombre: req.body.nombre
+                                nombre: req.body.nombre,
+                                wr: req.body.wr
                             };
                             ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
                                 assert.equal(err, null);
