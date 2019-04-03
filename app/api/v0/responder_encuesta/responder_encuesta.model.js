@@ -152,10 +152,10 @@ module.exports.indicadores = function (db, encuesta, callback) {
                 var preguntaRespondida = doc.preguntas[i];
                 var pregunta = encuesta.preguntas[i];
 
-                var respuestaName = preguntaRespondida.respuesta.name = encuesta.tipoEncuesta.id === 1 ? preguntaRespondida.respuesta.name : preguntaRespondida.respuesta.categoria;
+                var respuestaName = preguntaRespondida.respuesta.name = encuesta.tipoEncuesta.id === 1 || encuesta.tipoEncuesta.id === 4 ? preguntaRespondida.respuesta.name : preguntaRespondida.respuesta.categoria;
                 for (var j in pregunta.respuestas) {
                     var respuesta = pregunta.respuestas[j];
-                    var respuestaNameTemp = encuesta.tipoEncuesta.id === 1 ? respuesta.name : respuesta.categoria;
+                    var respuestaNameTemp = encuesta.tipoEncuesta.id === 1 || encuesta.tipoEncuesta.id === 4? respuesta.name : respuesta.categoria;
 
                     if (preguntaRespondida.respuesta.id === respuesta.id) {
                         respuesta.porcentaje++;
