@@ -159,6 +159,20 @@ module.exports.calificaciones = function (req, res) {
     });
 };
 
+module.exports.calificacionesPrototipo = function (req, res) {
+    var d = new Date();
+    start = d.getMilliseconds();
+    Log.logStart({ controller: controller, method: 'Examen.calificaciones', d: d, body: req.params.id });
+    Connection.ejecute(function (err, client) {
+        assert.equal(null, err);
+        EncuestaModel.calificacionesPrototipo(client.db(), req.params.id, function (result, status) {
+            client.close();
+            Log.logEnd({ start: start, response: result });
+            res.status(status).jsonp(result);
+        });
+    });
+};
+
 module.exports.calificaciones_excel = function (req, res) {
     var d = new Date();
     start = d.getMilliseconds();

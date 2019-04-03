@@ -10,8 +10,13 @@ module.exports.create = function (db, data, callback) {
     }
 
     var examen = false;
+    var prototipo = false;
+
     if (data.tipoEncuesta.id === 3) {
         examen = true;
+    }
+    if (data.tipoEncuesta.id === 4) {
+        prototipo = true;
     }
 
     var insert = {
@@ -22,8 +27,12 @@ module.exports.create = function (db, data, callback) {
         date: new Date()
     };
     if (examen) {
-        insert.attuid = data.attuid,
-            insert.nombre = data.nombre
+        insert.attuid = data.attuid;
+        insert.nombre = data.nombre;
+    }
+    if (prototipo) {
+        insert.attuid = data.attuid;
+        insert.wr = data.wr;
     }
 
     db.collection(collectionName).insertOne(insert, function (err, response) {

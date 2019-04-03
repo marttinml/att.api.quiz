@@ -212,6 +212,45 @@ module.exports.calificaciones = function (db, id, callback) {
 
 };
 
+module.exports.calificacionesPrototipo = function (db, id, callback) {
+  var result = [];
+  var cursor = db.collection("responder_encuesta").aggregate
+    (
+    [
+      {
+        "$match":
+          {
+            "encuesta.id": Number(id)
+          }
+      },
+      {
+        "$project":
+          {
+            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", calificacion: "$preguntas"
+          }
+      }
+    ]
+    );
+  cursor.each(function (err, doc) {
+    if (doc != null) {
+      var correctas = 0;
+      for (let index = 0; index < doc.calificacion.length; index++) {
+        const element = doc.calificacion[index].respuesta;
+        if (element.id == 0) {
+          correctas++
+        }
+      }
+      doc.calificacion = ((correctas / doc.calificacion.length) * 100).toFixed(2);
+      result.push(doc);
+    }
+    else {
+      cursor.close();
+      callback(result, 200);
+    }
+  });
+
+};
+
 module.exports.responder_examen = function (db, body, callback) {
 
   var result = {};
