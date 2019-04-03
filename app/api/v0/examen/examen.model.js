@@ -226,7 +226,7 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", fecha: "$date", preguntas: "$preguntas"
+            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", fecha: "$date", preguntas: "$preguntas", comentario: "$comentario"
           }
       }
     ]
@@ -249,6 +249,14 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
         };
         result.push(obj);
       }
+      var obj = {
+        wr : doc.wr,
+        attuid: doc.attuid,
+        pregunta: "Comentarios",
+        respuesta: doc.comentario,
+        fecha: doc.fecha
+      };
+      result.push(obj);
     }
     else {
       cursor.close();

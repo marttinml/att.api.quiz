@@ -33,6 +33,7 @@ module.exports.create = function (db, data, callback) {
     if (prototipo) {
         insert.attuid = data.attuid;
         insert.wr = data.wr;
+        insert.comentario = data.comentario || "";
     }
 
     db.collection(collectionName).insertOne(insert, function (err, response) {

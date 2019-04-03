@@ -36,7 +36,8 @@ module.exports.create = function (req, res) {
                                 tipoEncuesta: encuesta.data.tipoEncuesta,
                                 attuid: req.body.attuid,
                                 nombre: req.body.nombre,
-                                wr: req.body.wr
+                                wr: req.body.wr,
+                                comentario: req.body.comentario
                             };
                             ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
                                 assert.equal(err, null);
