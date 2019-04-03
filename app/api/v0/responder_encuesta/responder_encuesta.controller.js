@@ -28,30 +28,51 @@ module.exports.create = function (req, res) {
             if (encuesta.success) {
 
                 if (encuesta.data.tipoEncuesta.id === 3 || encuesta.data.tipoEncuesta.id === 4 ) {
-                    ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
-                        if (response.success) {
-                            var data = {
-                                encuesta: encuesta.data,
-                                preguntasList: req.body.preguntas,
-                                tipoEncuesta: encuesta.data.tipoEncuesta,
-                                attuid: req.body.attuid,
-                                nombre: req.body.nombre,
-                                wr: req.body.wr,
-                                comentario: req.body.comentario
-                            };
-                            ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
-                                assert.equal(err, null);
-                                client.close();
-                                Log.logEnd({ start: start, response: result });
-                                //response
-                                res.status(status).jsonp(result);
-                            });
 
-                        }
-                        else {
-                            res.status(status).jsonp(response);
-                        }
-                    });
+                    if (encuesta.data.tipoEncuesta.id === 3 ) {
+                        ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
+                            if (response.success) {
+                                var data = {
+                                    encuesta: encuesta.data,
+                                    preguntasList: req.body.preguntas,
+                                    tipoEncuesta: encuesta.data.tipoEncuesta,
+                                    attuid: req.body.attuid,
+                                    nombre: req.body.nombre,
+                                    wr: req.body.wr,
+                                    comentario: req.body.comentario
+                                };
+                                ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
+                                    assert.equal(err, null);
+                                    client.close();
+                                    Log.logEnd({ start: start, response: result });
+                                    //response
+                                    res.status(status).jsonp(result);
+                                });
+
+                            }
+                            else {
+                                res.status(status).jsonp(response);
+                            }
+                        });
+                    }
+                    if (encuesta.data.tipoEncuesta.id === 4 ) {
+                        var data = {
+                            encuesta: encuesta.data,
+                            preguntasList: req.body.preguntas,
+                            tipoEncuesta: encuesta.data.tipoEncuesta,
+                            attuid: req.body.attuid,
+                            nombre: req.body.nombre,
+                            wr: req.body.wr,
+                            comentario: req.body.comentario
+                        };
+                        ResponderEncuestaModel.create(client.db(), data, function (err, result, status) {
+                            assert.equal(err, null);
+                            client.close();
+                            Log.logEnd({ start: start, response: result });
+                            //response
+                            res.status(status).jsonp(result);
+                        });
+                    }
                 }
                 else {
                     var data = {
