@@ -126,7 +126,7 @@ module.exports.indicadores = function (db, encuesta, callback) {
     for (var i in encuesta.preguntas[0].respuestas) {
         var respuesta = encuesta.preguntas[0].respuestas[i];
         encuesta.graficas[i] = {};
-        encuesta.graficas[i].name = encuesta.tipoEncuesta.id === 1 ? respuesta.name : respuesta.categoria;
+        encuesta.graficas[i].name = encuesta.tipoEncuesta.id === 1 || encuesta.tipoEncuesta.id === 4 ? respuesta.name : respuesta.categoria;
         encuesta.graficas[i].porcentaje = 0;
         encuesta.graficas[i].id = respuesta.id;
     }
