@@ -226,22 +226,29 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", calificacion: "$preguntas"
+            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", fecha: "$date", preguntas: "$preguntas"
           }
       }
     ]
     );
+
+    // console.log(cursor);
+
+
   cursor.each(function (err, doc) {
+
     if (doc != null) {
-      var correctas = 0;
-      for (let index = 0; index < doc.calificacion.length; index++) {
-        const element = doc.calificacion[index].respuesta;
-        if (element.id == 0) {
-          correctas++
-        }
+
+      for (var i in doc.preguntas) {
+        var obj = {
+          wr : doc.wr,
+          attuid: doc.attuid,
+          pregunta: doc.preguntas[i].pregunta,
+          respuesta: doc.preguntas[i].respuesta.id,
+          fecha: doc.fecha
+        };
+        result.push(obj);
       }
-      doc.calificacion = ((correctas / doc.calificacion.length) * 100).toFixed(2);
-      result.push(doc);
     }
     else {
       cursor.close();

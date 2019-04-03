@@ -194,3 +194,26 @@ module.exports.calificaciones_excel = function (req, res) {
     });
 };
 
+module.exports.calificacionesPrototipoExcel = function (req, res) {
+    var d = new Date();
+    start = d.getMilliseconds();
+    Log.logStart({ controller: controller, method: 'Examen.calificaciones', d: d, body: req.params.id });
+    Connection.ejecute(function (err, client) {
+        assert.equal(null, err);
+
+        EncuestaModel.calificacionesPrototipo(client.db(), req.params.id, function (result, status) {
+
+            if (status === 200 && result.length) {
+                client.close();
+                Log.logEnd({ start: start, response: result });
+                res.xls("Examen-" + req.params.id + '.xlsx', result);
+            }
+            else {
+                res.status(201).jsonp({ "error": "No se puede crear excel" });
+            };
+        });
+    });
+};
+
+
+
