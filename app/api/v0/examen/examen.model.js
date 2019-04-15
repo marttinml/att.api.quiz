@@ -254,8 +254,7 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
         wr : doc.wr,
         attuid: doc.attuid,
         pregunta: "Comentarios",
-        respuesta: doc.comentario,
-        respuesta: "",
+        respuesta: doc.comentario || "",
         fecha: doc.fecha
       };
       result.push(obj);
