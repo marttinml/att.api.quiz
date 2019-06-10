@@ -15,7 +15,7 @@ module.exports.create = function (db, data, callback) {
     if (data.tipoEncuesta.id === 3) {
         examen = true;
     }
-    if (data.tipoEncuesta.id === 4) {
+    if (data.tipoEncuesta.id === 4 || data.tipoEncuesta.id === 10) {
         prototipo = true;
     }
 

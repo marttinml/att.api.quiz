@@ -27,7 +27,7 @@ module.exports.create = function (req, res) {
 
             if (encuesta.success) {
 
-                if (encuesta.data.tipoEncuesta.id === 3 || encuesta.data.tipoEncuesta.id === 4 ) {
+                if (encuesta.data.tipoEncuesta.id === 3 || encuesta.data.tipoEncuesta.id === 4 || encuesta.data.tipoEncuesta.id === 10 ) {
 
                     if (encuesta.data.tipoEncuesta.id === 3 ) {
                         ResponderEncuestaModel.validar_examen(client.db(), req.body.idEncuesta, req.body.attuid, function (status, response) {
@@ -55,7 +55,7 @@ module.exports.create = function (req, res) {
                             }
                         });
                     }
-                    if (encuesta.data.tipoEncuesta.id === 4 ) {
+                    if (encuesta.data.tipoEncuesta.id === 4 || encuesta.data.tipoEncuesta.id === 10) {
                         var data = {
                             encuesta: encuesta.data,
                             preguntasList: req.body.preguntas,
