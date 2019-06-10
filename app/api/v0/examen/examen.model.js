@@ -226,7 +226,7 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
       {
         "$project":
           {
-            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", examen: "$encuesta.titulo", fecha: "$date", preguntas: "$preguntas", comentario: "$comentario"
+            _id: 0, id_examen: "$encuesta.id", attuid: "$attuid", wr: "$wr", nombre: "$nombre", examen: "$encuesta.titulo", fecha: "$date", preguntas: "$preguntas", comentario: "$comentario"
           }
       }
     ]
@@ -240,6 +240,8 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
     if (doc != null) {
 
       for (var i in doc.preguntas) {
+
+
         var obj = {
           wr : doc.wr,
           nombre : doc.nombre,
