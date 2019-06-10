@@ -242,6 +242,7 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
       for (var i in doc.preguntas) {
         var obj = {
           wr : doc.wr,
+          nombre : doc.nombre,
           attuid: doc.attuid,
           pregunta: doc.preguntas[i].pregunta,
           respuesta: doc.preguntas[i].respuesta.name,
