@@ -11,12 +11,17 @@ module.exports.create = function (db, data, callback) {
 
     var examen = false;
     var prototipo = false;
+    var test = false;
+
 
     if (data.tipoEncuesta.id === 3) {
         examen = true;
     }
     if (data.tipoEncuesta.id === 4 || data.tipoEncuesta.id === 10) {
         prototipo = true;
+    }
+    if (data.tipoEncuesta.id === 10) {
+        test = true;
     }
 
     var insert = {
@@ -27,6 +32,10 @@ module.exports.create = function (db, data, callback) {
         date: new Date()
     };
     if (examen) {
+        insert.attuid = data.attuid;
+        insert.nombre = data.nombre;
+    }
+    if (test) {
         insert.attuid = data.attuid;
         insert.nombre = data.nombre;
     }

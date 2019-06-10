@@ -252,6 +252,7 @@ module.exports.calificacionesPrototipo = function (db, id, callback) {
       }
       var obj = {
         wr : doc.wr,
+        nombre : doc.nombre,
         attuid: doc.attuid,
         pregunta: "Comentarios",
         respuesta: doc.comentario || "",
