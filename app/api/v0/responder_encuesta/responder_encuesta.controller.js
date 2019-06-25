@@ -55,7 +55,7 @@ module.exports.create = function (req, res) {
                             }
                         });
                     }
-                    if (encuesta.data.tipoEncuesta.id === 4 || encuesta.data.tipoEncuesta.id === 10) {
+                    if (encuesta.data.tipoEncuesta.id === 4 || encuesta.data.tipoEncuesta.id === 10 || encuesta.data.tipoEncuesta.id === 11) {
                         var data = {
                             encuesta: encuesta.data,
                             preguntasList: req.body.preguntas,
